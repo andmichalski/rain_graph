@@ -2,6 +2,7 @@ import unittest
 from dbfread import DBF
 import datetime
 from collections import OrderedDict
+import glob
 
 
 class RainfallFunc:
@@ -127,3 +128,24 @@ class RainfallFunc:
 
         # Close opened file
         f.close()
+
+
+    # Function iterate over files in directory
+    @staticmethod
+    def find_dbf_files():
+        list_files = glob.glob("*.dbf")
+        list_files.sort()
+        return list_files
+
+    class TestsFindDBF(unittest.TestCase):
+
+        def test_first(self):
+            self.assertEqual(len(find_dbf_files()), 2)
+
+    # Function iterate over files and merge it
+    @staticmethod
+    def merge_all_dbf(list_dbfs):
+        merged_list = list_dbfs[0]
+        for filename in list_dbfs[1:]:
+            merged_list = RainfallFunc.merge_dbf(merged_list, filename)
+        return merged_list
